@@ -1,5 +1,5 @@
 <?php
-// You're the man now, dawg.
+// You're the man now, dawgz.
 /*
 |--------------------------------------------------------------------------
 | Create The Application
