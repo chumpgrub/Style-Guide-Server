@@ -1,0 +1,7 @@
+node_modules
+
+.env
+
+.data
+docker-vh
+docker-compose.yml
