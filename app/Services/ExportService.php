@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\ExportService;
+namespace App\Services;
 
 class ExportService {
 	public function __construct() {}
