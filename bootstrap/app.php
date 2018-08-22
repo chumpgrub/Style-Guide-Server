@@ -87,7 +87,13 @@ $app->middleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\ExportServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
+
+$app->bind(
+	'App\Http\Controllers\StyleguideExportController',
+	'App\Providers\ExportServiceProvider'
+);
 
 /*
 |--------------------------------------------------------------------------
