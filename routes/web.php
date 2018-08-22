@@ -27,7 +27,7 @@ $router->group(['prefix' => 'api'], function() use ($router) {
 
     $router->put('projects/{id}', ['uses' => 'StyleguideController@update']);
 
-    $router->get('projects/{id}/export', ['uses' => 'StyleguideController@export']);
+    $router->get('projects/{id}/export', ['uses' => 'StyleguideExportController@export']);
 
 });
 
