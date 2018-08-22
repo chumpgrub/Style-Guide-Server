@@ -50,4 +50,9 @@ class StyleguideController extends Controller
         return response('Deleted Project', 200);
     }
 
+    public function export($id)
+	{
+		return response()->json(Project::find($id));
+	}
+
 }
