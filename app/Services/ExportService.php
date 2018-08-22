@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Project;
+
 class ExportService {
 	public function __construct() {}
 
