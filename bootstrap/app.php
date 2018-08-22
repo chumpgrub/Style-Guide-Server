@@ -48,10 +48,10 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-$app->singleton(
-	App\Http\Controllers\StyleguideExportController::class,
-	App\Providers\ExportServiceProvider::class
-);
+//$app->singleton(
+//	App\Http\Controllers\StyleguideExportController::class,
+//	App\Providers\ExportServiceProvider::class
+//);
 
 // load cors configurations
 $app->configure('cors');
