@@ -14,7 +14,7 @@ class StyleguideExportController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct( ExportService $export ) {
+	public function __construct( \App\Services\ExportService $export ) {
 		dd($export);
 		$this->export = $export;
 	}
