@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class StyleguideExportController extends Controller {
 
-	public $export;
+	protected $export;
 
 	/**
 	 * Create a new controller instance.
@@ -15,13 +15,13 @@ class StyleguideExportController extends Controller {
 	 * @return void
 	 */
 	public function __construct( \App\Services\ExportService $export ) {
-		dd($export);
 		$this->export = $export;
 	}
 
 	public function export( $id ) {
 		$data = Project::find( $id );
-		dd( $data );
+
+		$this->export->get( $data );
 
 		return response()->json( Project::find( $id ) );
 	}
