@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\ExportService as ExportService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+	    $this->app->singleton(ExportService::class, function ($app) {
+		    return new ExportService();
+	    });
     }
 }

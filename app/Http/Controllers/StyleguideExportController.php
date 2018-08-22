@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Project;
-use App\Providers\ExportServiceProvider;
 use Illuminate\Http\Request;
 
 class StyleguideExportController extends Controller {
@@ -15,7 +14,8 @@ class StyleguideExportController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct( ExportServiceProvider $export ) {
+	public function __construct( ExportService $export ) {
+		dd($export);
 		$this->export = $export;
 	}
 
