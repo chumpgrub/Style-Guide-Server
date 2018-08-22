@@ -48,6 +48,11 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton(
+	App\Http\Controllers\StyleguideExportController::class,
+	App\Providers\ExportServiceProvider::class
+);
+
 // load cors configurations
 $app->configure('cors');
 
@@ -90,10 +95,10 @@ $app->middleware([
 $app->register(App\Providers\ExportServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 
-$app->bind(
-	'App\Http\Controllers\StyleguideExportController',
-	'App\Providers\ExportServiceProvider'
-);
+//$app->bind(
+//	'App\Http\Controllers\StyleguideExportController',
+//	'App\Providers\ExportServiceProvider'
+//);
 
 /*
 |--------------------------------------------------------------------------
