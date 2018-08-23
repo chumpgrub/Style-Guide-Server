@@ -8,6 +8,7 @@ class ExportService {
 	public function __construct() {}
 
 	public function get( Project $data ) {
+		return 'EXPORT SERVICE';
 		dd($data);
 	}
 }

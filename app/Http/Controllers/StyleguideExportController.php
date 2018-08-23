@@ -21,9 +21,9 @@ class StyleguideExportController extends Controller {
 	public function export( $id ) {
 		$data = Project::find( $id );
 
-		$this->export->get( $data );
+		return response()->make( $this->export->get( $data ) );
 
-		return response()->json( Project::find( $id ) );
+//		return response()->json( Project::find( $id ) );
 	}
 
 }
