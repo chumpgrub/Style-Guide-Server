@@ -3,17 +3,20 @@
 namespace App\Services;
 
 use App\Project;
+use Storage;
 
 class ExportService {
 	public function __construct() {}
 
 	public function get( Project $data ) {
 
-		var_dump( class_exists( 'Storage' ) );
+//		var_dump( class_exists( 'Storage' ) );
 //		echo '<pre>' . print_r( $data->id, TRUE ) . '</pre>';
 
 		$colors = $this->get_colors( $data->colors_defs );
 		$fonts  = $this->get_fonts( $data->typekit_fonts, $data->google_fonts, $data->web_fonts );
+
+		echo '<pre>' . print_r( Storage::disk('local')->put('test.scss', $colors.$fonts), TRUE ) . '</pre>';
 
 		echo '<pre>' . print_r( $fonts . $colors, TRUE ) . '</pre>';
 
@@ -26,12 +29,12 @@ class ExportService {
 
 		$colors = json_decode( $color_data );
 
-		$return_colors = '';
+		$return_colors = "/* PROJECT COLORS */\n\n";
 
 		if ( ! empty( $colors ) ) {
 			foreach( $colors as $color ) {
 				$color_var = str_replace( ' ', '-', strtolower( $color->name ) );
-				$return_colors .= sprintf( "// %s<br>$%s: %s;<br><br>", $color->name, $color_var, $color->value );
+				$return_colors .= sprintf( "// %s\n$%s: %s;\n", $color->name, $color_var, $color->value );
 			}
 		}
 		return $return_colors;
@@ -63,13 +66,13 @@ class ExportService {
 	protected function get_typekit_fonts( $data ) {
 		$fonts = json_decode( $data );
 
-		$return_fonts = '';
+		$return_fonts = "\n\n/* FONT FAMILIES */\n\n";
 
 		if ( ! empty( $fonts ) ) {
 			foreach( $fonts as $index => $font ) {
 				$count = $index + 1;
 				$font_var = 'typekit-' . $count;
-				$return_fonts .= sprintf( "// %s<br>$%s: \"%s\";<br><br>", $font->name, $font_var, $font->slug );
+				$return_fonts .= sprintf( "// %s\n$%s: \"%s\";\n", $font->name, $font_var, $font->slug );
 			}
 		}
 		return $return_fonts;
@@ -84,7 +87,7 @@ class ExportService {
 			foreach( $fonts as $index => $font ) {
 				$count = $index + 1;
 				$font_var = 'googlefont-' . $count;
-				$return_fonts .= sprintf( "// %s<br>$%s: \"%s\";<br><br>", $font->name, $font_var, $font->name );
+				$return_fonts .= sprintf( "// %s\n$%s: \"%s\";\n", $font->name, $font_var, $font->name );
 			}
 		}
 		return $return_fonts;
@@ -99,7 +102,7 @@ class ExportService {
 			foreach( $fonts as $index => $font ) {
 				$count = $index + 1;
 				$font_var = 'webfont-' . $count;
-				$return_fonts .= sprintf( "// %s<br>$%s: \"%s\";<br><br>", $font->name, $font_var, $font->name );
+				$return_fonts .= sprintf( "// %s\n$%s: \"%s\";\n", $font->name, $font_var, $font->name );
 			}
 		}
 		return $return_fonts;
