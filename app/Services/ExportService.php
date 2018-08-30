@@ -10,13 +10,13 @@ class ExportService {
 
 	public function get( Project $data ) {
 
-//		var_dump( class_exists( 'Storage' ) );
+		var_dump( class_exists( 'Zipper' ) );
 //		echo '<pre>' . print_r( $data->id, TRUE ) . '</pre>';
 
 		$colors = $this->get_colors( $data->colors_defs );
 		$fonts  = $this->get_fonts( $data->typekit_fonts, $data->google_fonts, $data->web_fonts );
 
-		echo '<pre>' . print_r( Storage::disk('local')->put('test.scss', $colors.$fonts), TRUE ) . '</pre>';
+//		echo '<pre>' . print_r( Storage::disk('local')->put('test.scss', $colors.$fonts), TRUE ) . '</pre>';
 
 		echo '<pre>' . print_r( $fonts . $colors, TRUE ) . '</pre>';
 
