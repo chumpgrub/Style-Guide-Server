@@ -21,7 +21,15 @@ class StyleguideExportController extends Controller {
 	public function export( $id ) {
 		$data = Project::find( $id );
 
-		return response()->make( $this->export->get( $data ) );
+		// Project zip.
+		$zip_file = $this->export->get( $data );
+
+		// Download and delete project zip.
+		$response = response()->download( $zip_file )->deleteFileAfterSend(true);
+
+		ob_end_clean();
+
+		return $response;
 
 //		return response()->json( Project::find( $id ) );
 	}

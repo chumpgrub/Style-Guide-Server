@@ -4,25 +4,49 @@ namespace App\Services;
 
 use App\Project;
 use Storage;
+use Zipper;
+//use Illuminate\Support\Facades\Hash as Hash;
 
 class ExportService {
+
+	protected $project;
+
 	public function __construct() {}
 
 	public function get( Project $data ) {
 
-		var_dump( class_exists( 'Zipper' ) );
-//		echo '<pre>' . print_r( $data->id, TRUE ) . '</pre>';
+		$this->project = $data;
+		$project_name = strtolower( str_replace( ' ', '-', $data->name ) );
+		$project_root = storage_path( 'projects' ) . '/' . $project_name;
 
 		$colors = $this->get_colors( $data->colors_defs );
 		$fonts  = $this->get_fonts( $data->typekit_fonts, $data->google_fonts, $data->web_fonts );
 
-//		echo '<pre>' . print_r( Storage::disk('local')->put('test.scss', $colors.$fonts), TRUE ) . '</pre>';
-
-		echo '<pre>' . print_r( $fonts . $colors, TRUE ) . '</pre>';
+		// Save SCSS partial to assets.
+		Storage::disk( 'projects' )->put( $project_name . '/assets/_styleguide.scss', $colors.$fonts);
 
 		$images = $this->get_images( $data->image_defs );
-//		echo '<pre>' . print_r( $data, TRUE ) . '</pre>';
-//		return 'EXPORT SERVICE';
+
+		// Save images to assets.
+		if ( ! empty( $images ) ) {
+			foreach( $images as $image ) {
+				Storage::disk( 'projects' )->put( $project_name . '/assets/' . $image['name'] . '.gif', file_get_contents( $image['src']) );
+			}
+		}
+
+		echo '<pre>' . print_r( $images, TRUE ) . '</pre>';
+
+		// Get files written to project assets directory.
+		$files = glob( $project_root . '/assets/*' );
+
+		// Zipper object.
+		$zipper = new Zipper;
+
+		// Zip all files in project assets directory.
+		$zipper->make( $project_root .'/' . $project_name . '.zip')->add( $files )->close();
+
+		return $project_root . '/' . $project_name . '.zip';
+
 	}
 
 	protected function get_colors( $color_data ) {
@@ -110,6 +134,8 @@ class ExportService {
 
 	protected function get_images( $image_data ) {
 
+		$image_return = [];
+
 		// Convert from JSON.
 		$images = json_decode( $image_data );
 
@@ -118,14 +144,18 @@ class ExportService {
 
 				// Determine size arguments.
 				$size_arg = '';
+				$image_name = '';
 				if ( property_exists( $image, 'width' ) && property_exists( $image, 'height' ) && $image->width && $image->height ) {
 					$size_arg = sprintf( '%dx%d/', $image->width, $image->height );
+					$image_name = sprintf( '%dx%d', $image->width, $image->height );
 				} else {
 					if ( property_exists( $image, 'width' ) && $image->width ) {
 						$size_arg = sprintf( '%d/', $image->width );
+						$image_name = sprintf( '%dx%d', $image->width, $image->width );
 					}
-					if ( property_exists( $image, 'width' ) && $image->height ) {
+					if ( property_exists( $image, 'height' ) && $image->height ) {
 						$size_arg = sprintf( '%d/', $image->height );
+						$image_name = sprintf( '%dx%d', $image->height, $image->height );
 					}
 				}
 
@@ -150,13 +180,14 @@ class ExportService {
 				}
 
 				if ( $size_arg ) {
-					echo '<div>';
-					printf( 'https://via.placeholder.com/%s%s%s%s', $size_arg, $background_color_arg, $text_color_arg, $label_arg );
-					echo '</div>';
-//					echo '<pre>' . print_r( $image, TRUE ) . '</pre>';
+					$image_return[] = [
+						'name'  => $image_name,
+						'src' => sprintf( 'https://via.placeholder.com/%s%s%s%s', $size_arg, $background_color_arg, $text_color_arg, $label_arg )
+					];
 				}
 			}
 		}
-		
+
+		return $image_return;
 	}
 }
